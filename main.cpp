@@ -33,6 +33,8 @@ int main()
     avl::SmoothImage_Gauss(image_thresh, atl::NIL, 1.2f, atl::NIL, 2.0f, image_smooth, diagKernelRadiusX,diagKernelRadiusY );
     avl::SaveImageToJpeg(image_smooth, "out_smooth.jpg", 100, 0);
 
+    //end
+
     return 0;
 }
 
