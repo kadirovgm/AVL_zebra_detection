@@ -30,10 +30,14 @@ int main()
     avl::SaveImageToJpeg(image_thresh, "out_thresh.jpg", 100, 0);
 
     //Gauss smooth
-    avl::SmoothImage_Gauss(image_thresh, atl::NIL, 1.2f, atl::NIL, 2.0f, image_smooth, diagKernelRadiusX,diagKernelRadiusY );
+    //avl::SmoothImage_Gauss(image_thresh, atl::NIL, 1.2f, atl::NIL, 2.0f, image_smooth, diagKernelRadiusX,diagKernelRadiusY );
+    //avl::SaveImageToJpeg(image_smooth, "out_smooth.jpg", 100, 0);
+
+    //Approximation of the gaussian filter, which can be faster for large kernels.
+    avl::SmoothImage_Deriche(image_thresh, atl::NIL, 1.0f, atl::NIL, image_smooth);
     avl::SaveImageToJpeg(image_smooth, "out_smooth.jpg", 100, 0);
 
-    //end
+
 
     return 0;
 }
