@@ -12,6 +12,13 @@ int main()
     avl::Image image_wb; //wb
     avl::Image image_thresh; //after thresholding
     avl::Image image_smooth; //after gauss smooth
+    avl::Image image_interpol;
+    avl::Image image_threshhold;
+    avl::Image image_canny;
+    avl::Image image_empty;
+    avl::Region reg_1;
+    Array<Path> arr;
+
 
     //Kernel method
     //In machine learning, kernel methods are a class of algorithms for pattern analysis,
@@ -37,6 +44,24 @@ int main()
     avl::SmoothImage_Deriche(image_thresh, atl::NIL, 1.0f, atl::NIL, image_smooth);
     avl::SaveImageToJpeg(image_smooth, "out_smooth.jpg", 100, 0);
 
+    //avl::ImageLocalMaxima(image_smooth, atl::NIL, 0, atl::NIL, atl::NIL, 1.0f, atl::NIL,atl::NIL);
+    //avl::SaveImageToJpeg(image_smooth, "out_localmax.jpg", 100, 0);
+
+    //interpolates two images linearly pixel by pixel.
+    avl::LerpImages(image_thresh, image_smooth, atl::NIL, 0.5f, image_interpol);
+    avl::SaveImageToJpeg(image_interpol, "out_interpol.jpg", 100, 0);
+
+    //canny edge detection
+    avl::DetectEdges(image_smooth, atl::NIL, EdgeFilter::Type::Canny, 2.0f, atl::NIL, 15.0f, 5.0f, 0.0f, 1, image_canny,  image_empty);
+    avl::SaveImageToJpeg(image_canny, "out_canny.jpg", 100, 0);
+
+    //image to region
+    avl::ThresholdToRegion(image_canny, atl::NIL, 128.0f, atl::NIL, 0.0f, reg_1);
+
+    //region contours
+    avl::RegionContours(reg_1, RegionContourMode::Type::PixelEdges, RegionConnectivity::Type::EightDirections, arr);
+
+    // next draw segment to painting lines of zebra
 
 
     return 0;
