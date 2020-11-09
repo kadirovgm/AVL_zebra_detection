@@ -2,7 +2,7 @@
 #include "AVL.h"
 #include "STD.h"
 
-using namespace std;
+
 using namespace avl;
 using namespace atl;
 
@@ -17,7 +17,7 @@ int main()
     avl::Image image_canny;
     avl::Image image_empty;
     avl::Region reg_1;
-    Array<Path> arr;
+    atl::Array<avl::Path> arr;
 
 
     //Kernel method
@@ -28,6 +28,7 @@ int main()
 
     //load image in.jpg
     avl::LoadImage("in.jpg", 0, image_in);
+
     //Creates a monochromatic image by averaging the input image channels.
     avl::AverageChannels(image_in, atl::NIL, image_wb);
     avl::SaveImageToJpeg(image_wb, "out_wb.jpg", 100, 0);
@@ -44,14 +45,11 @@ int main()
     avl::SmoothImage_Deriche(image_thresh, atl::NIL, 1.0f, atl::NIL, image_smooth);
     avl::SaveImageToJpeg(image_smooth, "out_smooth.jpg", 100, 0);
 
-    //avl::ImageLocalMaxima(image_smooth, atl::NIL, 0, atl::NIL, atl::NIL, 1.0f, atl::NIL,atl::NIL);
-    //avl::SaveImageToJpeg(image_smooth, "out_localmax.jpg", 100, 0);
-
     //interpolates two images linearly pixel by pixel.
     avl::LerpImages(image_thresh, image_smooth, atl::NIL, 0.5f, image_interpol);
     avl::SaveImageToJpeg(image_interpol, "out_interpol.jpg", 100, 0);
 
-    //canny edge detection
+    //canny edge detection!!!
     avl::DetectEdges(image_smooth, atl::NIL, EdgeFilter::Type::Canny, 2.0f, atl::NIL, 15.0f, 5.0f, 0.0f, 1, image_canny,  image_empty);
     avl::SaveImageToJpeg(image_canny, "out_canny.jpg", 100, 0);
 
@@ -62,25 +60,21 @@ int main()
     avl::RegionContours(reg_1, RegionContourMode::Type::PixelEdges, RegionConnectivity::Type::EightDirections, arr);
 
     Pixel red;
-    red.Set(245, 16, 16, 0);
+    int x = 245; int y = 16; int z = 16; int w = 0; //RGB image (red)
+    red.Set(x, y, z, w); // set value
 
-    DrawingStyle draw;
+    DrawingStyle draw; //take each rgb and draw
     for(auto path : arr)
     {
-        avl::Rectangle2D rect; // draw rectangle pryamougolnik
+        avl::Rectangle2D rect; // draw rectangle
         avl::PathBoundingRectangle(path, BoundingRectangleFeature::Type::MinimalArea, 0.0f, RectangleOrientation::Type::Horizontal, rect, atl::NIL, atl::NIL, atl::NIL);
-        if(rect.width>200 && rect.width <370 && rect.height>25)
+        if(rect.width>200 && rect.width <370 && rect.height>25) //rectangle sort for detection zebra!
         {
-            avl::DrawRectangle(image_in, rect, atl::NIL, red, draw);//Pixel green green.Set
+            avl::DrawRectangle(image_in, rect, atl::NIL, red, draw); //draw rectangle only in zebra
         }
 
     }
-    avl::SaveImageToJpeg(image_in, "out_out.jpg", 100, 0); //??
-
-    // next draw segment to painting lines of zebra
-    //Line2D line;
-
-    //avl::FitLineToPoints_LTE(arr, atl::NIL, 3, atl::NIL,line , atl::NIL, atl::NIL, 5);
+    avl::SaveImageToJpeg(image_in, "out_out.jpg", 100, 0); //save output
 
     return 0;
 }
