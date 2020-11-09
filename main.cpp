@@ -61,15 +61,19 @@ int main()
     //region contours
     avl::RegionContours(reg_1, RegionContourMode::Type::PixelEdges, RegionConnectivity::Type::EightDirections, arr);
 
-    Pixel green;
-    green.Set(50, 205, 50, 0);
+    Pixel red;
+    red.Set(245, 16, 16, 0);
 
     DrawingStyle draw;
     for(auto path : arr)
     {
-        avl::Rectangle2D rect;
+        avl::Rectangle2D rect; // draw rectangle pryamougolnik
         avl::PathBoundingRectangle(path, BoundingRectangleFeature::Type::MinimalArea, 0.0f, RectangleOrientation::Type::Horizontal, rect, atl::NIL, atl::NIL, atl::NIL);
-        avl::DrawRectangle(image_in, rect, atl::NIL, green, draw);//Pixel green green.Set
+        if(rect.width>200 && rect.width <370 && rect.height>25)
+        {
+            avl::DrawRectangle(image_in, rect, atl::NIL, red, draw);//Pixel green green.Set
+        }
+
     }
     avl::SaveImageToJpeg(image_in, "out_out.jpg", 100, 0); //??
 
