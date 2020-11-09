@@ -63,7 +63,7 @@ int main()
     int x = 245; int y = 16; int z = 16; int w = 0; //RGB image (red)
     red.Set(x, y, z, w); // set value
 
-    DrawingStyle draw; //take each rgb and draw
+    DrawingStyle draw; //take each path and draw
     for(auto path : arr)
     {
         avl::Rectangle2D rect; // draw rectangle
